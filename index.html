@@ -13,31 +13,75 @@
   <header> 
   <h1>Twittler</h1>
   <p>a Twitter clone by Alex Nitta</p>
+  <h2 id="here">home</h2>
+  <h4 id ="gohome"></h4>
   <div id="content"></div>
   </header> 
     <script>
       
+      var base = streams.home; // set the current base; defaults to home
+      
       var showTweets = function(){
-        var $content = $('#content');
-        $content.html('');
-
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          
-          var tweetHTML = '<div class="tweet"><span class="at">@</span><span class="userLink">' + tweet.user + ':</span> <span class="message"> ' + tweet.message + '</span> <span class="timestamp">[' + tweet.created_at + ']</span></div>';
-
-          $(content).append(tweetHTML);
-          
-          index -= 1;
+        var $content = $('#content'); // set $content to div id="content"
+        $content.html(''); // clear the content div
+        var index = base.length - 1; // set index to one less than number of tweets
+        
+        while(index >= 0){ // loop through current location
+          var tweet = base[index]; // set tweet to current index  
+          var tweetHTML = '<div class="tweet"><span class="at">@</span><span class="userLink" id="' + tweet.user + '">' + tweet.user + ':</span> <span class="message"> ' + tweet.message + '</span> <span class="timestamp">[' + tweet.created_at + ']</span></div>'; // set up tweetHTML per tweet content
+          $(content).append(tweetHTML); // append tweet to content div
+          index -= 1; // move to next lowest index
         };
-      }
+        
+        $('.userLink').hover(function() { // set styles for hover and click events on user names
+          $(this).addClass ("hover");
+          }, function() {
+            $(this).removeClass ("hover")
+          });
+        $('.userLink').mousedown(function() {
+            $(this).addClass ("click");
+          });
+        $('.userLink').mouseup(function() {
+            $(this).removeClass ("click");
+          });
+        
+        $('.userLink').click(function() { // when a username is clicked,
+          var location = streams.users // set prefix for streams.users
+          base = location[($(this).attr('id'))]; // set base to streams.users.(this user)
+          $('#here').text($(this).attr('id')); // set text of h2 id="here" to current user name
+          $('#gohome').text('[back]'); // set text of back link to [back]
+          showTweets(); // show tweets with base set to current user
+        });
+        
+        $('#gohome').hover( function() { // set styles for hover and click events on back link
+          $(this).addClass ("hover");
+          }, function() {
+          $(this).removeClass ("hover")
+          });
+        $('#gohome').mousedown(function() {
+          $(this).addClass ("click");
+          });
+        $('#gohome').mouseup(function() {
+          $(this).removeClass ("click");
+          });
+        
+        $('#gohome').click(function() { // when the back link is clicked
+          $('#here').text('home'); // set text of h2 id="here" to 'home'
+          $('#gohome').text(''); // clear text of back link
+          base = streams.home; // set base to home
+          showTweets(); // show tweets with base set to home
+        })
+        
+      };
+      
+
+      
           
       $(document).ready(showTweets);
-      
-      // uncomment to update feed automatically
-      
-      // $(document).ready(setInterval(showTweets,300));
+      // update feed automatically every 1 second
+      $(document).ready(setInterval(showTweets,1000));
+
+
 
     </script>
   </body>

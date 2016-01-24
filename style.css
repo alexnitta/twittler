@@ -2,16 +2,17 @@ body {
   font-family:'Montserrat', sans-serif;
   font-weight: 200;
   max-width: 960px;
+  padding: 0 10px;
   margin: 0 auto !important;
   float: none !important;
   background-image: url("stone_bg.jpg");  
 }
 
-body h1, div {
+body h1, h2, div {
   color:white;
 }
 
-p {
+body p, h4{
   color:lightgrey;
 }
 
@@ -32,3 +33,15 @@ p {
 .timestamp {
   color:lightgrey;
 }
+
+.hover{
+  color:SandyBrown;
+}
+.click{
+  color:Sienna;
+}
+
+#gohome {
+  text-decoration: underline;
+}
+  
